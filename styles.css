@@ -48,7 +48,7 @@ button {
     background-color: aqua;
 }
 .btn-m {
-    background-image: url('/bomb.png');
+    background-image: url('/images/bomb.png');
     background-position: center;
     background-size: cover;
 }
