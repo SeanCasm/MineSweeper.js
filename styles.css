@@ -1,0 +1,121 @@
+body {
+    background-color: rgb(31, 33, 48);
+}
+h1,
+label {
+    color: white;
+}
+select,
+button {
+    font-weight: bold;
+    font-size: larger;
+    text-align: center;
+    width: 100px;
+    padding: 0;
+}
+.d-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: center;
+}
+.d-grid {
+    display: grid;
+    margin: auto;
+    grid-column-gap: 0px;
+}
+.grid-disable {
+    pointer-events: none;
+}
+.grid-easy {
+    grid-template-columns: repeat(9, 1fr);
+}
+.grid-medium {
+    grid-template-columns: repeat(12, 1fr);
+}
+.grid-hard {
+    grid-template-columns: repeat(15, 1fr);
+}
+.grid-btns {
+    width: 40px;
+    height: 40px;
+    background-color: rgb(171, 179, 255);
+}
+.grid-btns:hover {
+    background-color: rgb(144, 144, 144);
+}
+.btn-nm {
+    background-color: aqua;
+}
+.btn-m {
+    background-image: url('/bomb.png');
+    background-position: center;
+    background-size: cover;
+}
+.mine-1 {
+    background-color: rgb(66, 132, 170);
+}
+.mine-2 {
+    background-color: rgb(63, 219, 42);
+}
+.mine-3 {
+    background-color: rgb(24, 85, 5);
+}
+.mine-4 {
+    background-color: rgb(146, 180, 23);
+}
+.mine-5 {
+    background-color: rgb(223, 164, 4);
+}
+.lost {
+    font-size: 40px;
+    animation: lost 1.5s infinite;
+    font-style: oblique;
+}
+.win {
+    font-size: 70px;
+    animation: win 1.5s infinite;
+    font-style: italic;
+}
+.pres {
+    opacity: 1;
+    animation: tittle 2.2s;
+}
+@keyframes win {
+    0% {
+        opacity: 1;
+        color: rgb(43, 183, 226);
+    }
+    50% {
+        opacity: 0.45;
+        color: rgb(0, 255, 170);
+    }
+    100% {
+        opacity: 1;
+        color: rgb(43, 183, 226);
+    }
+}
+@keyframes lost {
+    0% {
+        opacity: 1;
+        color: blueviolet;
+    }
+    50% {
+        opacity: 0.45;
+        color: red;
+    }
+    100% {
+        opacity: 1;
+        color: blueviolet;
+    }
+}
+@keyframes tittle {
+    0% {
+        opacity: 0;
+        margin-top: 200px;
+    }
+    100% {
+        margin-top: 0px;
+        opacity: 1;
+    }
+}
