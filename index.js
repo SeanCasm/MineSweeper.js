@@ -53,7 +53,6 @@ const generateMines = (id) => {
                     mineCells.push(gridArray[i][j].id);
                 }
                 if (mineCells.length == currentTotalMines) {
-                    console.log(mineCells.length);
                     break Here;
                 }
             }
@@ -72,13 +71,13 @@ const checkForMine = (e) => {
     const j = id % size; // get the column
     if (!started) generateMines(e.target.id);
     if (gridArray[i][j]?.mine) { // current pressed cell
-        gameLost();
+        showAllMines();
     } else {
         e.target.classList.add('btn-nm');
         e.target.classList.add('pointer-disable');
         clearCount++;
         if (clearCount == (gridArray.length - currentTotalMines)) { // cells grid cleaned
-            gameEnd();
+            gameWinner();
             return;
         }
         checkForMinesAround(i, j, id); //current cell selected
@@ -139,30 +138,42 @@ const startGame = () => {
 
     intervalID = setInterval(()=>timerInterval(p2), 1000);
 }
-const gameEnd = () => {
+const gameWinner = () => {
     const win = document.createElement('h1');
     win.innerHTML = 'You win!';
-    popup.appendChild(win);
     win.classList.add('win');
-    clearInterval(intervalID);
-    grid.classList.add('pointer-disable');
+    gameEnd(win);
 }
-const gameLost = () => {
-    showAllMines();
+const gameLoser = () => {
     const lost = document.createElement('h1');
     lost.innerHTML = 'You lost!';
-    popup.appendChild(lost);
     lost.classList.add('lost');
+    gameEnd(lost);
+}
+const gameEnd=(append)=>{
     clearInterval(intervalID);
-    grid.classList.add('pointer-disable');
+    
+    popup.appendChild(append);
+    
+    const stats = document.getElementById('stats');
+    stats.classList.add('fixed-stats');
+    stats.classList.remove('d-flex','d-flex-row');
+
+    popup.appendChild(stats);
+    popup.appendChild(resetBtn);
+    popup.classList.add('pop-up');
 }
 const showAllMines = () => {
     let i = 0;
+    grid.classList.add('pointer-disable');
     let idI = setInterval(() => {
         const btn = document.getElementById(mineCells[i]);
         btn.classList.add('btn-m');
         i++;
-        if (i >= mineCells.length) clearInterval(idI);
+        if (i >= mineCells.length){
+            setTimeout(gameLoser,1000);
+            clearInterval(idI);
+        }
 
     }, 55);
 }

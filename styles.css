@@ -23,10 +23,10 @@ main{
 }
 .d-flex-col {
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
 }
 .d-flex-row {
-    gap: 24px;
+    gap: 10px;
     text-align: center;
     margin: auto;
 }
@@ -91,14 +91,32 @@ main{
     background-color: rgb(255, 0, 0);
 }
 .lost {
-    font-size: 40px;
+    font-size: 50px;
+    margin: 0;
+    text-shadow: 2px 2px #000000;
     animation: lost 1.5s infinite;
     font-style: oblique;
 }
+.pop-up{
+    background-color: rgba(118, 131, 255, 0.5);
+    padding: 15px;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+.fixed-stats{
+    font-size: 20px;
+    text-shadow: 2px 2px #000000;
+}
 .win {
-    font-size: 70px;
+    font-size: 50px;
+    background-color: rgb(190, 194, 228);
     animation: win 1.5s infinite;
     font-style: italic;
+    left: 0;
+    right: 0;
 }
 .pres {
     opacity: 1;
@@ -120,7 +138,7 @@ main{
         color: rgb(43, 183, 226);
     }
     50% {
-        opacity: 0.45;
+        opacity: 0.65;
         color: rgb(0, 255, 170);
     }
     100% {
@@ -131,15 +149,15 @@ main{
 @keyframes lost {
     0% {
         opacity: 1;
-        color: blueviolet;
+        color: rgb(226, 43, 43);
     }
     50% {
-        opacity: 0.45;
-        color: red;
+        opacity: 0.65;
+        color: rgb(255, 136, 0);
     }
     100% {
         opacity: 1;
-        color: blueviolet;
+        color: rgb(226, 43, 43);
     }
 }
 @keyframes tittle {
