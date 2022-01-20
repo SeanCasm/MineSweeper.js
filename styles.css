@@ -13,11 +13,18 @@ button {
     width: 100px;
     padding: 0;
 }
-.d-flex {
+.d-flex{
     display: flex;
+    text-align: center;
+}
+.d-flex-col {
     flex-direction: column;
     gap: 24px;
+}
+.d-flex-row{
+    gap: 24px;
     text-align: center;
+    margin: auto;
 }
 .d-grid {
     display: grid;
@@ -51,6 +58,7 @@ button {
     background-image: url('/bomb.png');
     background-position: center;
     background-size: cover;
+    pointer-events: none;
 }
 .mine-1 {
     background-color: rgb(66, 132, 170);
