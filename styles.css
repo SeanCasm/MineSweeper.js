@@ -2,7 +2,8 @@ body {
     background-color: rgb(31, 33, 48);
 }
 h1,
-label {
+label,
+p {
     color: white;
 }
 select,
@@ -13,47 +14,60 @@ button {
     width: 100px;
     padding: 0;
 }
+main{
+    margin: 10px;
+}
 .d-flex {
     display: flex;
+    text-align: center;
+}
+.d-flex-col {
     flex-direction: column;
     gap: 24px;
+}
+.d-flex-row {
+    gap: 24px;
     text-align: center;
+    margin: auto;
 }
 .d-grid {
     display: grid;
     margin: auto;
     grid-column-gap: 0px;
 }
-.grid-disable {
+.pointer-disable {
     pointer-events: none;
 }
 .grid-easy {
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(7, 1fr);
 }
 .grid-medium {
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(9, 1fr);
 }
 .grid-hard {
-    grid-template-columns: repeat(15, 1fr);
+    grid-template-columns: repeat(12, 1fr);
 }
 .grid-btns {
     width: 40px;
     height: 40px;
-    background-color: rgb(171, 179, 255);
+    background-color: rgb(193, 199, 255);
 }
 .grid-btns:hover {
     background-color: rgb(144, 144, 144);
 }
 .btn-nm {
-    background-color: aqua;
+    background-color: rgb(117, 124, 182);
 }
 .btn-m {
-    background-image: url('/images/bomb.png');
+    background-image: url("img/bomb.png");
     background-position: center;
     background-size: cover;
+    pointer-events: none;
+    background-color: red;
+    animation: showMine 1s;
 }
 .mine-1 {
-    background-color: rgb(66, 132, 170);
+    background-color: rgb(134, 211, 255);
 }
 .mine-2 {
     background-color: rgb(63, 219, 42);
@@ -66,6 +80,15 @@ button {
 }
 .mine-5 {
     background-color: rgb(223, 164, 4);
+}
+.mine-6 {
+    background-color: rgb(223, 121, 4);
+}
+.mine-7 {
+    background-color: rgb(184, 51, 28);
+}
+.mine-8 {
+    background-color: rgb(255, 0, 0);
 }
 .lost {
     font-size: 40px;
@@ -80,6 +103,16 @@ button {
 .pres {
     opacity: 1;
     animation: tittle 2.2s;
+}
+@media (max-width: 500px) {
+    .d-flex-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .d-grid>button {
+        width: 30px;
+        height: 30px;
+    }
 }
 @keyframes win {
     0% {
@@ -117,5 +150,15 @@ button {
     100% {
         margin-top: 0px;
         opacity: 1;
+    }
+}
+@keyframes showMine {
+    0% {
+        opacity: 0;
+        background-color: blueviolet;
+    }
+    100% {
+        opacity: 1;
+        background-color: red;
     }
 }

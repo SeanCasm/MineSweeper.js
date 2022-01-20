@@ -10,12 +10,12 @@
 </head>
 
 <body>
-    <main class="d-flex pres">
+    <main class="d-flex d-flex-col pres">
         <h1>
             MineSweeper.js
         </h1>
-        <div>
-            <label for="">Select the difficult: </label>
+        <div class="d-flex d-flex-row">
+            <label for="">Select the difficulty: </label>
             <select id='select'>
                 <option value="easy">Easy</option>
                 <option value="medium">Medium</option>
@@ -26,9 +26,15 @@
         </div>
         <div id='popup'>
         </div>
-        <div id='timer' style="color: white;">
+        <div class="d-flex d-flex-row">
+            <div id='timer' >
 
+            </div>
+            <div id='minesAmount'>
+
+            </div>
         </div>
+        
         <div id='grid' class="d-grid">
 
         </div>

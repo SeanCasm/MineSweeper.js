@@ -4,144 +4,140 @@ const startBtn = document.getElementById('start');
 const grid = document.getElementById('grid');
 const popup = document.getElementById('popup');
 const timer = document.getElementById('timer');
+const minesAmount = document.getElementById('minesAmount');
 
 let intervalID;
-let difficult = 'easy';
+let difficulty = 'easy';
 let size = 0;
-const totalMines = [10, 35, 50];
+const totalMines = [8, 12, 20];//easy, medium, hard
 let currentTotalMines = 0;
-let gridMatrix;
+let gridArray;
 let time = 0;
 let started = false;
 let clearCount = 0;
-let btns = [];
+let mineCells = [];
+
+class Mine {
+    constructor(mine, mineCount, id) {
+        this.mine = mine;
+        this.mineCount = mineCount;
+        this.id = id;
+    }
+}
 
 const generateGrid = () => {
-    gridMatrix = new Array(size).fill({}).map(() => new Array(size).fill({}));
-    for (let i = 1; i <= size; i++) {
-        for (let j = 1; j <= size; j++) {
-            const e = document.createElement('button');
-            e.addEventListener('click', checkForMine);
-            const id = i.toString() + j.toString();
-            e.classList.add(id);
-            e.classList.add('grid-btns');
-            btns.push(e);
-            grid.appendChild(e);
-        }
+    gridArray = new Array(size);//create an array of size 'size' to contain more arrays
 
+    let id = 0;
+    for (let i = 0; i < size; i++) {
+        gridArray[i] = new Array(size);//create a new array inside the current index of parent array 
+        for (let j = 0; j < size; j++) {
+            const btn = document.createElement('button');
+            btn.id = id.toString();
+            btn.onclick = checkForMine;
+            btn.classList.add('grid-btns');
+            grid.appendChild(btn);
+            gridArray[i][j] = new Mine(false, 0, id);
+            id++;
+        }
     }
 }
-const generateMines = () => {
-    let totalMines = 0;
+const generateMines = (id) => {
+    Here:
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-            gridMatrix[i][j] = {
-                mine: Math.random() < 0.15, //cell has a mine or not
-                mineCount: 0, // total mines around cell
-                hasMines() {
-                    return mineCount > 0;
+            if (gridArray[i][j].id != id && !gridArray[i][j].mine) {
+                const isMine = Math.random() > 0.89;
+                gridArray[i][j].mine = isMine;
+                if (isMine) {
+                    mineCells.push(gridArray[i][j].id);
+                }
+                if (mineCells.length == currentTotalMines) {
+                    console.log(mineCells.length);
+                    break Here;
                 }
             }
-            if (gridMatrix[i][j].mine) totalMines++;
 
-            if (totalMines >= currentTotalMines) return;
         }
-        if (i == size - 1 && totalMines < currentTotalMines) i = 0;
-    }
-}
-
-const checkForMine = (e) => {
-    if (!started) generateMines();
-
-    const i = e.target.classList[0];
-    const k = Number.parseInt(i[0]);
-    const l = Number.parseInt(i[1]);
-    console.log(k,l);
-    if (gridMatrix[k - 1][l - 1].mine) {
-        gameLost();
-    } else {
-        const btn = document.getElementsByClassName(k.toString() + l.toString())[0];
-        btn.classList.add('btn-nm');
-        clearCount++;
-        if (clearCount == size * size) {
-            gameEnd();
-            return;
+        if (mineCells.length < currentTotalMines && i == size - 1) {
+            i = 0;
         }
-        checkForMinesAround(k - 1, l - 1); //current cell selected
     }
     started = true;
 }
-const checkForMinesAround = (i = 0, j = 0) => {
-    let cellAdj;
-    const currentCell = gridMatrix[i][j];
-    let btn;
-    let p = (i + 1).toString(), o = (j + 1).toString();
-    if (i - 1 >= 0 && j - 1 >= 0) {
-        cellAdj = gridMatrix[i - 1][j - 1];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-    if (i - 1 >= 0) {
-        cellAdj = gridMatrix[i - 1][j];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-    if (i - 1 >= 0 && j + 1 < size) {
-        cellAdj = gridMatrix[i - 1][j + 1];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
+const checkForMine = (e) => {
 
-    if (j - 1 >= 0) {
-        cellAdj = gridMatrix[i][j - 1];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-
-    if (j + 1 < size) {
-        cellAdj = gridMatrix[i][j + 1];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-    if (i + 1 < size && j - 1 >= 0) {
-        cellAdj = gridMatrix[i + 1][j - 1];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-    if (i + 1 < size) {
-        cellAdj = gridMatrix[i + 1][j];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-    if (i + 1 < size && j + 1 < size) {
-        cellAdj = gridMatrix[i + 1][j + 1];
-        if (cellAdj.mine) currentCell.mineCount++;
-    }
-    btn = document.getElementsByClassName(p + o)[0];
-    if (currentCell.hasMines) {
-        btn.classList.add(`mine-${currentCell.mineCount}`)
-        btn.innerHTML = currentCell.mineCount;
+    const id = Number.parseInt(e.target.id);
+    const i = Number.parseInt(id / size); // get the row
+    const j = id % size; // get the column
+    if (!started) generateMines(e.target.id);
+    if (gridArray[i][j]?.mine) { // current pressed cell
+        gameLost();
+    } else {
+        e.target.classList.add('btn-nm');
+        e.target.classList.add('pointer-disable');
+        clearCount++;
+        if (clearCount == (gridArray.length - currentTotalMines)) { // cells grid cleaned
+            gameEnd();
+            return;
+        }
+        checkForMinesAround(i, j, id); //current cell selected
     }
 }
-const timerInterval = () => {
+const checkForMinesAround = (i, j, id) => {
+    let rowStart = i - 1, rowEnd = i + 1;
+    let colStart = j - 1, colEnd = j + 1;
+
+    for (let a = rowStart; a <= rowEnd ; a++) {
+        if(a<0 || a>=size) continue;
+        for (let s = colStart; s <= colEnd ; s++) {
+            if(s<0 || s>=size) continue;
+            if (gridArray[a][s].mine) {
+                gridArray[i][j].mineCount++;
+            }
+        }
+    }
+    if (gridArray[i][j].mineCount > 0) {
+        const btn = document.getElementById(id);
+        btn.classList.add(`mine-${gridArray[i][j].mineCount}`);
+        btn.innerHTML = gridArray[i][j].mineCount;
+    }
+}
+const timerInterval = (p) => {
     time++;
-    timer.innerHTML = `Time: ${time}s`;
+    p.innerHTML = `Time: ${time}s`;
 }
 const startGame = () => {
-    difficult = select.value;
-    difficult[0].toLowerCase();
-    switch (difficult) {
+    difficulty = select.value;
+    difficulty[0].toLowerCase();
+    switch (difficulty) {
         case 'easy':
-            size = 9;
+            size = 7;
             currentTotalMines = totalMines[0];
             break;
         case 'medium':
-            size = 12;
+            size = 9;
             currentTotalMines = totalMines[1];
             break;
         case 'hard':
-            size = 15;
+            size = 12;
             currentTotalMines = totalMines[2];
             break;
     }
     select.disabled = startBtn.disabled = true;
-    grid.classList.add(`grid-${difficult}`);
+    grid.classList.add(`grid-${difficulty}`);
     generateGrid();
-    timer.innerHTML = `Time: ${time}s`;
-    intervalID = setInterval(timerInterval, 1000);
+    
+    const p1 = document.createElement('p');
+    const p2 = document.createElement('p');
+    
+    p1.innerHTML=`Total mines: ${currentTotalMines}`;
+    minesAmount.append(p1);
+
+    p2.innerHTML = `Time: ${time}s`;
+    timer.append(p2);
+
+    intervalID = setInterval(()=>timerInterval(p2), 1000);
 }
 const gameEnd = () => {
     const win = document.createElement('h1');
@@ -149,26 +145,26 @@ const gameEnd = () => {
     popup.appendChild(win);
     win.classList.add('win');
     clearInterval(intervalID);
-    grid.classList.add('grid-disable');
+    grid.classList.add('pointer-disable');
 }
 const gameLost = () => {
-    revealAllMines();
+    showAllMines();
     const lost = document.createElement('h1');
     lost.innerHTML = 'You lost!';
     popup.appendChild(lost);
     lost.classList.add('lost');
     clearInterval(intervalID);
-    grid.classList.add('grid-disable');
+    grid.classList.add('pointer-disable');
 }
-const revealAllMines = () => {
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            if (gridMatrix[i][j].mine) {
-                const btn = document.getElementsByClassName((i+1).toString()+(j+1).toString())[0];
-                btn.classList.add('btn-m');
-            }
-        }
-    }
+const showAllMines = () => {
+    let i = 0;
+    let idI = setInterval(() => {
+        const btn = document.getElementById(mineCells[i]);
+        btn.classList.add('btn-m');
+        i++;
+        if (i >= mineCells.length) clearInterval(idI);
+
+    }, 55);
 }
 const reloadPage = () => {
     window.location.reload();
