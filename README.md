@@ -2,4 +2,4 @@
 A simple Mine Sweeper game with some html,css and javascript.
 
 # How to play
-Coming soon...
+https://seancasm.github.io/MineSweeper.js/
